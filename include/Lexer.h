@@ -34,8 +34,9 @@ typedef struct _TokenList {
 
 } TokenList;
 
-/* Read tokens from a file */
+/* Read tokens from a file or string */
 TokenList* LexFile(FILE* infile);
+TokenList* LexString(char* instring);
 
 /* Print tokens (debugging) */
 void PrintTokens(FILE* outfile, TokenList* tokens);

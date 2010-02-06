@@ -1,7 +1,10 @@
 #include "Vyquon.h"
 
-
+extern void LoadCoreLibrary();
 int main(){
+    /* Load library */
+    LoadCoreLibrary();
+
     FILE* file = fopen("test/test.vy", "r");
     TokenList* tokens = LexFile(file);
 

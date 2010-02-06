@@ -37,5 +37,8 @@ typedef int ObjType;
 #include "VM.h"
 #include "Scope.h"
 
+/* External interface */
+#include "External.h"
+
 
 #endif /* VYQUON_H */

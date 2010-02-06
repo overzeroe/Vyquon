@@ -175,4 +175,10 @@ TokenList* LexFile(FILE* file){
     return list_start;
 }
 
+TokenList* LexString(char* string){
+    FILE* file = fmemopen(string, strlen(string), "r");
+    TokenList* tokens = LexFile(file);
+    fclose(file);
+    return tokens;
+}
 

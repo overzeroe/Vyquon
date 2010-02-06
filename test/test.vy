@@ -1,4 +1,3 @@
-(setvar false 'false)
-(setvar true 'true)
-
-(while true 'x)
+(setvar 'false 'false)
+(setvar 'true 'true)
+(native-function)
