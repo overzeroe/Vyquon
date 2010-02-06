@@ -1,0 +1,3 @@
+gdsl.lo: gdsl.c ../config.h
+
+../config.h:

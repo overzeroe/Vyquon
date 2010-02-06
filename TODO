@@ -1,0 +1,17 @@
+Smaller Things:
+  - Add a way to add functions to the library (external function interface)
+
+Library:
+  - math/arithmetic
+  - file IO
+  - looping
+  - macros
+  - pretty printing (printf, format)
+  - list functions
+  - various predicates for everything
+
+Big Things:
+  - Add a GC
+  - Add some form of error handling/detection
+  - Find and fix all memory leaks
+  - Can infix lisp work if we disallow +-=/* etc from symbols?
