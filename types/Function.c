@@ -3,7 +3,16 @@
 VyFunction* CreateFunction(ArgList args, Bytecode* code){
     VyFunction* func = VyMalloc(sizeof(VyFunction));
     func->arguments = args;
-    func->code = code;
+    func->code.bytecode = code;
+    func->native = false;
+    return func;
+}
+
+VyFunction* CreateNativeFunction(ArgList args, Native native_code){
+    VyFunction* func = VyMalloc(sizeof(VyFunction));
+    func->arguments = args;
+    func->code.native = native_code;
+    func->native = true;
     return func;
 }
 

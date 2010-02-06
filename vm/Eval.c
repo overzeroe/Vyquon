@@ -8,7 +8,7 @@ VyObj Eval(VyObj sexp){
 
 void PushInstr(VyObj);
 void PopInstr();
-void BindInstr(VyObj);
+void BindInstr();
 void ValueInstr(VyObj);
 void FuncInstr();
 void CallInstr(int);
@@ -35,7 +35,7 @@ VyObj EvalBytecode(Bytecode* bytecode){
                 PopInstr();
                 break;
             case INSTR_BIND:
-                BindInstr(instr.data);
+                BindInstr();
                 break;
             case INSTR_VALUE:
                 ValueInstr(instr.data);
@@ -66,9 +66,10 @@ void PushInstr(VyObj obj){
 void PopInstr(){
     StackPop();
 }
-void BindInstr(VyObj obj){
+void BindInstr(){
+    VyObj name_obj = StackPop();
     VyObj val = StackPeek();
-    VySymbol* name = (VySymbol*) Obj(obj);
+    VySymbol* name = (VySymbol*) Obj(name_obj);
     VariableBind(name, val);
 }
 void ValueInstr(VyObj obj){
@@ -93,19 +94,24 @@ int IfJmpInstr(VyObj data){
 void CallInstr(int num_args){
     VyFunction* func = (VyFunction*) Obj(StackPop());
 
-    Scope* caller_scope = CurrentScope();
-    EnterScope(func->live_scope);
-
     VyObj arguments[num_args];
     int i;
     for(i = num_args - 1; i >= 0; i--){
         arguments[i] = StackPop();
     }
 
-    BindArguments(func->arguments, arguments, num_args);
+    if(!func->native){
+        Scope* caller_scope = CurrentScope();
+        EnterScope(func->live_scope);
 
-    VyObj return_val = EvalBytecode(func->code);
-    ClearScope(func->live_scope);
-    EnterScope(caller_scope);
-    StackPush(return_val);
+        BindArguments(func->arguments, arguments, num_args);
+
+        VyObj return_val = EvalBytecode(func->code.bytecode);
+        ClearScope(func->live_scope);
+        EnterScope(caller_scope);
+        StackPush(return_val);
+    } else {
+        VyObj return_val = func->code.native(&arguments[0], num_args);
+        StackPush(return_val);
+    }
 }

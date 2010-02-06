@@ -15,14 +15,20 @@ typedef struct _ArgList {
     Param* params;
 } ArgList;
 
+typedef VyObj (*Native)(VyObj*, int); 
 typedef struct _VyFunction {
     ArgList arguments;
-    Bytecode* code;
+    union {
+        Bytecode* bytecode;
+        Native native;
+    } code;
+    bool native;
     Scope* live_scope;
 } VyFunction;
 
 
 VyFunction* CreateFunction(ArgList args, Bytecode* code);
+VyFunction* CreateNativeFunction(ArgList args, Native native_code);
 ArgList ParseArgList(VyObj);
 void BindArguments(ArgList arguments, VyObj values[], int num_args);
 

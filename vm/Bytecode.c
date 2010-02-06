@@ -31,8 +31,8 @@ inline Instruction Pop(){
     Instruction instr = {opcode: INSTR_POP, data: None()};
     return instr;
 }
-inline Instruction Bind(VyObj name){
-    Instruction instr = {opcode: INSTR_BIND, data: name};
+inline Instruction Bind(){
+    Instruction instr = {opcode: INSTR_BIND, data: None()};
     return instr;
 }
 inline Instruction Value(VyObj name){
@@ -76,8 +76,9 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
                 INSTR(Push(quoted));
             } else if(SymbolEq(symbol, "setvar")){
                 VyObj name = ListGet(cons, 1);
+                CompileExpr(bytecode, name);
                 CompileExpr(bytecode, ListGet(cons, 2));
-                INSTR(Bind(name));
+                INSTR(Bind());
             } else if(SymbolEq(symbol, "fn")){
                 VyObj arg_list = ListGet(cons, 1);
                 VyObj statements = Cdr((VyCons*) Obj(Cdr(cons)));
