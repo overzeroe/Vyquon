@@ -3,6 +3,6 @@ This is a small experimental Lisp-like language I'm writing for the hell of it!
 To compile, just
   make
 To run, just
-  ./vyquen
+  ./vyquon
 
 At the moment it just runs tests/test.vy.
