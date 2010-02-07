@@ -22,7 +22,7 @@ VyObj None(){
 }
 /* Check whether the object is empty */
 inline bool IsNone(VyObj obj){
-    return (x.type == 0 && x.obj == NULL);
+    return (obj.type == 0 && obj.obj == NULL);
 }
 
 /* Evaluate the truthiness of a value. 'false and nil are false, everything else is true. */

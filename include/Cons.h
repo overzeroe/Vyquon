@@ -31,8 +31,8 @@ bool IsNil(VyObj);
 VyObj Cons(VyObj, VyObj);
 
 /* Access the car and cdr of the cons cell */
-VyObj Car(VyCons*);
-VyObj Cdr(VyCons*);
+VyObj Car(VyObj);
+VyObj Cdr(VyObj);
 
 /* Assume that the cons cell is actually the head of a list,
  * and use that to find the nth element at the specified index

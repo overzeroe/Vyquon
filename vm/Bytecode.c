@@ -72,6 +72,7 @@ Bytecode* Compile(VyObj compileObj){
 Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
     /* How we compile depends on what we're compiling */
     ObjType type = Type(expr);
+    VyObj obj = expr;
 
 /* Convenience macro */
 #define INSTR(x) EmitInstruction(bytecode, x)
@@ -87,12 +88,13 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
 
     /* Lists are either special forms or function calls */
     if(type == OBJ_CONS){
+        VyCons* cons = (VyCons*) Obj(obj);
+
         bool special_form = false;
 
         /* All special forms have a symbol as the car */
         if(Type(Car(obj)) == OBJ_SYM){
             VySymbol* symbol = (VySymbol*)Obj(Car(obj));
-            VyObj cdr = Cdr(obj);
 
             /* Quoted forms are also just PUSH'd onto the stack */
             if(SymbolEq(symbol, "quote")){
