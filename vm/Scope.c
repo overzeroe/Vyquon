@@ -11,6 +11,7 @@ struct _Scope {
      */
     gdsl_hash_t var_values;
     gdsl_hash_t type_values;
+    gdsl_hash_t size_values;
 };
 
 /* Current scope in execution - becomes global when it's first accessed */
@@ -22,6 +23,7 @@ Scope* CreateScope(Scope* parent){
     scope->parent = parent;
     scope->var_values = gdsl_hash_alloc("varvalues", NULL, NULL, NULL, NULL, 5);
     scope->type_values = gdsl_hash_alloc("vartypes", NULL, NULL, NULL, NULL, 5);
+    scope->size_values = gdsl_hash_alloc("varsizes", NULL, NULL, NULL, NULL, 5);
     return scope;
 }
 
@@ -44,9 +46,12 @@ VyObj VariableValue(VySymbol* symb){
 
     /* Get the value and type from the individual hash tables */
     gdsl_element_t value = gdsl_hash_search(current->var_values, symb->symb);
-    gdsl_element_t type = gdsl_hash_search(current->type_values, symb->symb);
+    gdsl_element_t name = gdsl_hash_search(current->type_values, symb->symb);
+    gdsl_element_t size = gdsl_hash_search(current->size_values, symb->symb);
 
-    VyObj obj = WrapObj(value, (ObjType)(type));
+
+    VyType type = {size: (int) size, name: name};
+    VyObj obj = WrapObj(value, type);
     return obj;
 }
 
@@ -54,7 +59,8 @@ VyObj VariableValue(VySymbol* symb){
 void VariableBind(VySymbol* symb, VyObj obj){
     Scope* current = CurrentScope();
     gdsl_hash_put(current->var_values, Obj(obj), symb->symb);
-    gdsl_hash_put(current->type_values, (gdsl_element_t) (Type(obj)), symb->symb);
+    gdsl_hash_put(current->type_values, (gdsl_element_t) (Type(obj).name), symb->symb);
+    gdsl_hash_put(current->size_values, (gdsl_element_t) (Type(obj).size), symb->symb);
 }
 
 void EnterScope(Scope* scope){
@@ -63,4 +69,5 @@ void EnterScope(Scope* scope){
 void ClearScope(Scope* scope){
     gdsl_hash_flush(scope->var_values);
     gdsl_hash_flush(scope->type_values);
+    gdsl_hash_flush(scope->size_values);
 }

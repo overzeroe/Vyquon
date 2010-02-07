@@ -54,7 +54,7 @@ inline Instruction Func(){
     return instr;
 }
 inline Instruction Call(int num_args){
-    Instruction instr = {opcode: INSTR_CALL, data: WrapObj((void*) num_args, OBJ_NONE)};
+    Instruction instr = {opcode: INSTR_CALL, data: WrapObj((void*) num_args, TypeNone)};
     return instr;
 }
 
@@ -71,29 +71,28 @@ Bytecode* Compile(VyObj compileObj){
 /* Main recursive function */
 Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
     /* How we compile depends on what we're compiling */
-    ObjType type = Type(expr);
     VyObj obj = expr;
 
 /* Convenience macro */
 #define INSTR(x) EmitInstruction(bytecode, x)
 
     /* Self-evaluating forms are just PUSH'd onto the stack */
-    if(type == OBJ_STR || type == OBJ_NUM)
+    if(IsType(obj, TypeString) || IsType(obj, TypeFloat) || IsType(obj, TypeInt))
         INSTR(Push(expr));
 
     /* Symbols are evaluate as variables */
-    if(type == OBJ_SYM){
+    if(IsType(obj, TypeSymbol)){
         INSTR(Value(expr));
     }
 
     /* Lists are either special forms or function calls */
-    if(type == OBJ_CONS){
+    if(IsType(obj, TypeCons)){
         VyCons* cons = (VyCons*) Obj(obj);
 
         bool special_form = false;
 
         /* All special forms have a symbol as the car */
-        if(Type(Car(obj)) == OBJ_SYM){
+        if(IsType(Car(obj), TypeSymbol)){
             VySymbol* symbol = (VySymbol*)Obj(Car(obj));
 
             /* Quoted forms are also just PUSH'd onto the stack */
@@ -191,8 +190,8 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
                 
                 /* Substitute in values for the placeholders */
                 int end_index = bytecode->used;
-                jmp_placeholder->data = WrapObj((void*) end_index, OBJ_NONE);
-                if_jmp_placeholder->data = WrapObj((void*)else_index, OBJ_NONE);
+                jmp_placeholder->data = WrapObj((void*) end_index, TypeNone);
+                if_jmp_placeholder->data = WrapObj((void*)else_index, TypeNone);
             } 
             
             /* A while form of the form (while condition [statements]*) */
@@ -233,12 +232,12 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
                 }
 
                 /* Jmp back to start */
-                Instruction jmp = {opcode: INSTR_JMP, data: WrapObj((void*) start_index, OBJ_NONE)};
+                Instruction jmp = {opcode: INSTR_JMP, data: WrapObj((void*) start_index, TypeNone)};
                 EmitInstruction(bytecode, jmp);
 
                 /* This is where the loop should exit to, update the if_jmp instr */
                 int end_index = bytecode->used;
-                if_jmp_placeholder->data = WrapObj((void*) end_index, OBJ_NONE);
+                if_jmp_placeholder->data = WrapObj((void*) end_index, TypeNone);
 
                 /* The loop has to return something, and it will be nil. */
                 INSTR(Push(Nil()));
@@ -294,5 +293,5 @@ VyObj CompileFunctionObj(VyObj arg_list, VyObj statement_list){
 
     /* Create the actual object */
     VyFunction* func = CreateFunction(ParseArgList(arg_list), func_bytecode);
-    return WrapObj(func, OBJ_FUNC);
+    return WrapObj(func, TypeFunction);
 }

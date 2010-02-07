@@ -7,5 +7,5 @@ VyObj CreateString(char* str){
     /* We don't want the data from tokens to be stored, since we try to
      * free all tokens no matter what; thus, duplicate the data.  */
     string->str = strdup(str);
-    return WrapObj(string, OBJ_STR);
+    return WrapObj(string, TypeString);
 }

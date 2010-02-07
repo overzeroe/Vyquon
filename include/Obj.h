@@ -7,9 +7,14 @@
  * object itself. This might not be optimal and might not work with our future GC,
  * so this is liable to change.
  */
-typedef int ObjType;
+struct _VySymbol;
+typedef struct _VyType {
+    int size;
+    struct _VySymbol* name;   
+} VyType;
+
 typedef struct _VyObj {
-    ObjType type;
+    VyType type;
     void* obj;
 } VyObj;
 
@@ -17,10 +22,18 @@ typedef struct _VyObj {
 void* Obj(VyObj);
 
 /* Get the object's type */
-ObjType Type(VyObj);
+VyType Type(VyObj);
+
+/* Check whether an object is of a given type */
+bool IsType(VyObj, VyType);
+
+/* Create a new type of object. A type is defined by it's name (a symbol)
+ * and by the amount of memory it takes up (the size).
+ */
+VyType CreateType(int size, struct _VySymbol* name);
 
 /* Create an object pointing to some data of a certain type */
-VyObj WrapObj(void*,ObjType);
+VyObj WrapObj(void*,VyType);
 
 /* The None object is a hack for times when we have to pass some object.
  * It means nothing. It can be used to check for things, though, like ends
@@ -40,12 +53,7 @@ bool IsTrue(VyObj);
 /* Print a human-readable (if possible) reprentation of an object to a file */
 void PrintObj(FILE*, VyObj);
 
-/* Object types */
-#define OBJ_CONS 10     /* Cons cell */
-#define OBJ_STR  20     /* String */
-#define OBJ_SYM  30     /* Symbol */
-#define OBJ_NUM  40     /* Number */
-#define OBJ_FUNC 50     /* Function */
-#define OBJ_NONE 60     /* When we don't care wtf it is */
+/* Global types */
+VyType TypeCons, TypeString, TypeSymbol, TypeFloat, TypeInt, TypeFunction, TypeNone;
 
 #endif /* OBJ_H */

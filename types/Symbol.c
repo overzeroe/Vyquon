@@ -1,12 +1,17 @@
 #include "Vyquon.h"
 
-/* Create a symbol */
-VyObj CreateSymbol(char* str){
+/* Create a symbol but not an object */
+VySymbol* CreateSymbol_NoObj(char* str){
     VySymbol* symbol = VyMalloc(sizeof(VySymbol));
 
     /* Duplicate string data so we don't end up freeing things twice */
     symbol->symb = strdup(str);
-    return WrapObj(symbol, OBJ_SYM);
+    return symbol;
+}
+
+/* Create a symbol */
+VyObj CreateSymbol(char* str){
+    return WrapObj(CreateSymbol_NoObj(str), TypeSymbol);
 }
 
 /* Check for equality of two symbols. */

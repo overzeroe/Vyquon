@@ -13,7 +13,7 @@ void NewFunction(char* name, char* argument_list, Native function){
 
     /* Create the function object */
     VyFunction* func = CreateNativeFunction(arguments, function);
-    VyObj func_obj = WrapObj(func, OBJ_FUNC);
+    VyObj func_obj = WrapObj(func, TypeFunction);
 
     /* Bind it to name in the current (probably global) scope */
     VariableBind(symbol_name, func_obj);

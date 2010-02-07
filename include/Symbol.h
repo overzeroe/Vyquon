@@ -8,12 +8,16 @@
  * should treat the two different instances of the symbol as if they were
  * entirely distinct symbols in the first place.
  */
+
 typedef struct _VySymbol {
     char* symb;
 } VySymbol;
 
 /* Create a symbol */
 VyObj CreateSymbol(char*);
+
+/* Create a symbol but don't return it as an object (rarely needed) */
+VySymbol* CreateSymbol_NoObj(char*);
 
 /* Check for symbol equality... this should not be comparing a symbol to a char* (for reasons mentioned above) */
 bool SymbolEq(VySymbol*, char*);
