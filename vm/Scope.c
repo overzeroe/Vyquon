@@ -41,7 +41,6 @@ VyObj VariableValue(VySymbol* symb){
      * but if it isn't there, check the parent scope, and repeat.
      */
     Scope* current = CurrentScope();
-    printf("Name %s\n", symb->symb);fflush(stdout);
     while(!gdsl_hash_search(current->var_values, symb->symb))
         current = current->parent;
 

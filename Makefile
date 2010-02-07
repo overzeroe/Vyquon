@@ -12,9 +12,12 @@ ALLFILES 	= Lexer.o Mem.o Vyquon.o Parser.o Cons.o String.o Symbol.o Function.o 
 all: ${EXECUTABLE}
 
 # Invoke the compiler with linking enabled 
-${EXECUTABLE}: ${ALLFILES}
+${EXECUTABLE}: BINDIR ${ALLFILES}
 	cd bin; ${CMDLINK} ${ALLFILES}
 	mv bin/${EXECUTABLE} .
+
+BINDIR:
+	mkdir -p bin
 
 # Compile all C files into object code
 Vyquon.o: 
@@ -66,6 +69,6 @@ List.o:
 
 # Clean out the project and delete all .o files
 clean:
-	rm -rf bin/*.o 
-	rm ${EXECUTABLE}
+	rm -rf bin 
+	rm -f ${EXECUTABLE}
 

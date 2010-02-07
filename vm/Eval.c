@@ -38,7 +38,6 @@ VyObj EvalBytecode(Bytecode* bytecode){
 
         /* Current instruction */
         Instruction instr = bytecode->instructions[i];
-        printf("Instr %d\n", instr.opcode);
 
         /* Just call the appropriate function for each opcode */
         switch(instr.opcode){
@@ -120,7 +119,7 @@ void CallInstr(int num_args){
 
     VyObj arguments[num_args];
     int i;
-    for(i = num_args - 1; i >= 0; i--){
+    for(i = 0; i < num_args; i++){
         arguments[i] = StackPop();
     }
 
