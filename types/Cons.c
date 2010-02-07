@@ -1,12 +1,11 @@
 #include "Vyquon.h"
 
 /* This can return an empty list or the symbol 'nil */
+VyObj nil_symbol = {type: OBJ_NONE, obj: NULL};
 VyObj Nil(){
-    /* Create a cons cell where both of the values are nonexisten */
-    VyCons* cons = VyMalloc(sizeof(VyCons));
-    cons->car = None();
-    cons->cdr = None();
-    return WrapObj(cons, OBJ_CONS);
+    if(IsNone(nil_symbol))
+        nil_symbol = CreateSymbol("nil");
+    return nil_symbol;
 }
 
 /* Conjoin two objects */
@@ -31,14 +30,13 @@ bool IsNil(VyObj obj){
     if(Type(obj) == OBJ_CONS){
         return IsNone(Car(obj)) && IsNone(Cdr(obj));
     }
+
+    /* Make sure we already have a nil to compare to */
+    if(IsNone(nil_symbol))
+        nil_symbol = CreateSymbol("nil");
     
     /* The symbol nil is nil */
-    if(Type(obj) == OBJ_SYM){
-        return SymbolEq((VySymbol*) Obj(obj), "nil");
-    }
-
-    /* Everything else isn't nil */
-    return false;
+    return (Obj(obj) == Obj(nil_symbol));
 }
 
 /* Assume that this cons cell is a list, return the element at the nth index */
@@ -51,10 +49,10 @@ VyObj ListGet(VyCons* list, int index){
 }
 
 /* Find the length of a list with this cons cell at the front */
-int ListLen(VyCons* list){
+int ListLen(VyObj list){
     /* Nil ends a list */
-    if (IsNone(list->car) && IsNone(list->cdr)) return 0;
+    if (IsNil(list)) return 0;
 
     /* If it isn't nil, move one closer to the end (and increment our return value) */
-    else return 1 + ListLen((VyCons*) Obj(list->cdr));
+    else return 1 + ListLen(Cdr(list));
 }

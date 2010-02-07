@@ -42,6 +42,6 @@ VyObj ListGet(VyCons*, int index);
 /* Assume that the cons cell is actually the head of a list,
  * and use that to find the size of the list (distance to nil)
  */
-int ListLen(VyCons*);
+int ListLen(VyObj);
 
 #endif /* CONS_H */

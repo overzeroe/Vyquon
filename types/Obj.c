@@ -17,12 +17,12 @@ ObjType Type(VyObj object){
 
 /* Create an empty object */
 VyObj None(){
-    VyObj object = {obj: NULL, type: 0};
+    VyObj object = {obj: NULL, type: OBJ_NONE};
     return object;
 }
 /* Check whether the object is empty */
 inline bool IsNone(VyObj obj){
-    return (obj.type == 0 && obj.obj == NULL);
+    return (obj.type == OBJ_NONE && obj.obj == NULL);
 }
 
 /* Evaluate the truthiness of a value. 'false and nil are false, everything else is true. */
@@ -49,6 +49,10 @@ void PrintCons(FILE* file, VyCons* cons){
         /* Keep looping */
         if(Type(cdr) == OBJ_CONS)
             cons = (VyCons*) Obj(cdr);
+
+        /* Break on nil */
+        else if(IsNil(cdr))
+            break;
 
         /* If we've reached the end, but it isn't a nil, use the dot notation */
         else {

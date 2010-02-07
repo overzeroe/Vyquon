@@ -43,7 +43,7 @@ Param ParseParam(VyObj param){
 
 /* Given the argument list, parse it into ArgList format. */
 ArgList ParseArgList(VyObj list){
-    int num = ListLen((VyCons*) Obj(list));
+    int num = ListLen(list);
     Param* params = VyMalloc(sizeof(Param) * num);
     int i;
 

@@ -155,7 +155,7 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
                  */
 
                 /* Not all ifs must have an else clause */
-                bool has_else_clause = (ListLen(cons) == 4);
+                bool has_else_clause = (ListLen(obj) == 4);
 
                 /* Push condition evaluation onto stack */
                 bytecode = CompileExpr(bytecode, ListGet(cons, 1));
@@ -223,7 +223,7 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
                 Instruction* if_jmp_placeholder = &bytecode->instructions[bytecode->used - 1];
 
                 /* Compile loop body */
-                int i = 0, len = ListLen(cons) - 1;
+                int i = 0, len = ListLen(obj) - 1;
                 for(i = 0; i < len; i++){
                     bytecode = CompileExpr(bytecode, ListGet(cons, i + 1));
 
@@ -249,7 +249,7 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
 
         /* Evaluate and call function if it's not a special form */
         if(!special_form) {
-            int num_args = ListLen(cons) - 1;
+            int num_args = ListLen(obj) - 1;
 
             /* Evaluate all the arguments in reverse order (so they're popped off the stack in the right order) */
             int cur_arg = num_args;
@@ -278,7 +278,7 @@ VyObj CompileFunctionObj(VyObj arg_list, VyObj statement_list){
     VyCons* statement_cons = (VyCons*) Obj(statement_list);
 
     int statement_ind = 0;
-    int len = ListLen(statement_cons);
+    int len = ListLen(statement_list);
     while(statement_ind < len){
         /* Emit bytecode for each statement */
         VyObj statement = ListGet(statement_cons, statement_ind);

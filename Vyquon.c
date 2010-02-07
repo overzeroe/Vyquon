@@ -17,8 +17,9 @@ int main(){
     while(last){
         VyObj parsed = Parse(last, &last);
 
+        printf("|");
         PrintObj(stdout, parsed);
-        printf("\nevaluates to\n");
+        printf("|\nevaluates to\n");
 
         VyObj val = Eval(parsed);
 
