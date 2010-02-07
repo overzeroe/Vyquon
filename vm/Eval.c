@@ -14,7 +14,7 @@ void BindInstr();
 void ValueInstr(VyObj);
 void FuncInstr();
 void CallInstr(int);
-int IfJmpInstr(VyObj);
+int IfJmpInstr(int);
 
 /* Loop over instructions and evaluate them */
 VyObj EvalBytecode(Bytecode* bytecode){
@@ -35,14 +35,11 @@ VyObj EvalBytecode(Bytecode* bytecode){
         /* Current instruction */
         Instruction instr = bytecode->instructions[i];
 
-        /* We can't declare variables inside switch statements. This one is for the CALL opcode */
-        int args;
-
         /* Just call the appropriate function for each opcode */
         switch(instr.opcode){
             case INSTR_PUSH:
                 /* Data: what we are pushing */
-                PushInstr(instr.data);
+                PushInstr(instr.data.obj);
                 break;
             case INSTR_POP:
                 PopInstr();
@@ -52,23 +49,22 @@ VyObj EvalBytecode(Bytecode* bytecode){
                 break;
             case INSTR_VALUE:
                 /* Data: the variable name */
-                ValueInstr(instr.data);
+                ValueInstr(instr.data.obj);
                 break;
             case INSTR_FUNC:
                 FuncInstr();
                 break;
             case INSTR_CALL:
                 /* Data: how many args are being passed */
-                args = (int)Obj(instr.data);
-                CallInstr(args);
+                CallInstr(instr.data.num);
                 break;
 
             /* The jump instructions modify the jump ptr; we actually do the jump next iteration around. */
             case INSTR_JMP:
-                nextInstr = (int)Obj(instr.data);       
+                nextInstr = instr.data.num;
                 break;
             case INSTR_IFNJMP:
-                nextInstr = IfJmpInstr(instr.data);
+                nextInstr = IfJmpInstr(instr.data.num);
 
             /* If it's another opcode type, we're confused as hell. */
             default:    
@@ -105,8 +101,7 @@ void FuncInstr(){
     VyFunction* func = (VyFunction*) Obj(func_obj);
     func->live_scope = CreateScope(CurrentScope());
 }
-int IfJmpInstr(VyObj data){
-    int ifFalse = (int) Obj(data);
+int IfJmpInstr(int ifFalse){
     VyObj condition_value = StackPop();
     if(IsTrue(condition_value))
         return -1;

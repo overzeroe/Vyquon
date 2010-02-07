@@ -34,27 +34,27 @@ void EmitInstruction(Bytecode* bytecode, Instruction instr){
 
 /* Create instructions */
 inline Instruction Push(VyObj data){
-    Instruction instr = {opcode: INSTR_PUSH, data: data};
+    Instruction instr = {opcode: INSTR_PUSH, data: {data}};
     return instr;
 }
 inline Instruction Pop(){
-    Instruction instr = {opcode: INSTR_POP, data: None()};
+    Instruction instr = {opcode: INSTR_POP, data: {num: 0}};
     return instr;
 }
 inline Instruction Bind(){
-    Instruction instr = {opcode: INSTR_BIND, data: None()};
+    Instruction instr = {opcode: INSTR_BIND, data: {num: 0}};
     return instr;
 }
 inline Instruction Value(VyObj name){
-    Instruction instr = {opcode: INSTR_VALUE, data: name};
+    Instruction instr = {opcode: INSTR_VALUE, data: {name}};
     return instr;
 }
 inline Instruction Func(){
-    Instruction instr = {opcode: INSTR_FUNC, data: None()};
+    Instruction instr = {opcode: INSTR_FUNC, data: {num: 0}};
     return instr;
 }
 inline Instruction Call(int num_args){
-    Instruction instr = {opcode: INSTR_CALL, data: WrapObj((void*) num_args, TypeNone)};
+    Instruction instr = {opcode: INSTR_CALL, data: {num: num_args}};
     return instr;
 }
 
@@ -161,7 +161,7 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
                
                 /* Generate placeholder instructions - we can't actually issue the real ones because we don't know
                    how far we need to jump. Thus we will issue fake instructions, and modify them later. */
-                Instruction if_jmp = {opcode: INSTR_IFNJMP, data: None()};
+                Instruction if_jmp = {opcode: INSTR_IFNJMP, data: {num: 0}};
                 EmitInstruction(bytecode, if_jmp);
 
                 /* Get the pointer to the instruction we just issued so we can change it later */
@@ -171,7 +171,7 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
                 bytecode = CompileExpr(bytecode, ListGet(cons, 2));
 
                 /* Repeat what we did previously with the placeholder instruction */
-                Instruction jmp = {opcode: INSTR_JMP, data: None()};
+                Instruction jmp = {opcode: INSTR_JMP, data: {num: 0}};
                 EmitInstruction(bytecode, jmp);
                 Instruction* jmp_placeholder = &bytecode->instructions[bytecode->used - 1];
 
@@ -190,8 +190,8 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
                 
                 /* Substitute in values for the placeholders */
                 int end_index = bytecode->used;
-                jmp_placeholder->data = WrapObj((void*) end_index, TypeNone);
-                if_jmp_placeholder->data = WrapObj((void*)else_index, TypeNone);
+                jmp_placeholder->data.num = end_index;
+                if_jmp_placeholder->data.num = else_index;
             } 
             
             /* A while form of the form (while condition [statements]*) */
@@ -217,7 +217,7 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
                 bytecode = CompileExpr(bytecode, ListGet(cons, 1));
 
                 /* Emit incomplete instruction and record where it is */
-                Instruction if_jmp = {opcode: INSTR_IFNJMP, data: None()};
+                Instruction if_jmp = {opcode: INSTR_IFNJMP, data: {num: 0}};
                 EmitInstruction(bytecode, if_jmp);
                 Instruction* if_jmp_placeholder = &bytecode->instructions[bytecode->used - 1];
 
@@ -232,12 +232,12 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
                 }
 
                 /* Jmp back to start */
-                Instruction jmp = {opcode: INSTR_JMP, data: WrapObj((void*) start_index, TypeNone)};
+                Instruction jmp = {opcode: INSTR_JMP, data: {num: start_index}};
                 EmitInstruction(bytecode, jmp);
 
                 /* This is where the loop should exit to, update the if_jmp instr */
                 int end_index = bytecode->used;
-                if_jmp_placeholder->data = WrapObj((void*) end_index, TypeNone);
+                if_jmp_placeholder->data.num = end_index;
 
                 /* The loop has to return something, and it will be nil. */
                 INSTR(Push(Nil()));

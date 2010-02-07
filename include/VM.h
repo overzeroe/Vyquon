@@ -21,7 +21,10 @@ VyObj Eval(VyObj);
  */
 typedef struct _Instruction {
     int opcode;
-    VyObj data;
+    union {
+        VyObj obj;
+        int num;
+    } data;
 } Instruction;
 
 /* The bytecode for the interpreter. It is a dynamically allocated
