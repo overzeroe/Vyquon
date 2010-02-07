@@ -32,6 +32,9 @@ VyObj ParseQuoted(TokenList* tokens, TokenList** used){
     return Cons(CreateSymbol("quote"), Cons(Parse(tokens, used), Nil()));
 }
 
+extern VyObj CreateFloatFromStr(char*);
+extern VyObj CreateIntFromStr(char*);
+
 /* The recursive front end to the parser */
 VyObj Parse(TokenList* tokens, TokenList** used) {
     /* Determine what to do based on the first token */
@@ -45,13 +48,19 @@ VyObj Parse(TokenList* tokens, TokenList** used) {
         case TOKEN_QUOTED:
             return ParseQuoted(tokens->next, used);
 
-        /* Symbols and strings are just converted into their object counterparts */
+        /* Symbols, strings, and numbers are just converted into their object counterparts */
         case TOKEN_SYMBOL:
             *used = tokens->next;
             return CreateSymbol(first.data);
         case TOKEN_STRING:
             *used = tokens->next;
             return CreateString(first.data);
+        case TOKEN_NUMFLT:
+            *used = tokens->next;
+            return CreateFloatFromStr(first.data);
+        case TOKEN_NUMINT:
+            *used = tokens->next;
+            return CreateIntFromStr(first.data);
 
         /* Error! We shouldn't have other token types. */
         default:

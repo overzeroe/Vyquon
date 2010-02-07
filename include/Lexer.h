@@ -15,6 +15,8 @@ typedef struct _Token {
 /* Token types */
 #define TOKEN_OPAREN 10     /* Opening parenthesis */
 #define TOKEN_CPAREN 20     /* Closing parenthesis */
+#define TOKEN_NUMFLT 25     /* Floating point number */
+#define TOKEN_NUMINT 26     /* Integer */
 #define TOKEN_SYMBOL 30     /* Symbol */
 #define TOKEN_QUOTED 40     /* Quote mark '*/
 #define TOKEN_STRING 50     /* String, delimited by quotes "" */

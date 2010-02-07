@@ -5,6 +5,11 @@ inline bool IsWhitespace(char c){
     return c == ' ' || c == '\t' || c == '\n';
 }
 
+/* Is it numeric */
+inline bool IsNumeric(char c){
+    return '0' <= c && c <= '9';
+}
+
 /* Create and manage token lists */
 TokenList* CreateTokenList() {
     Token token = {type: TOKEN_NOTDEF, data: NULL};
@@ -43,6 +48,8 @@ void PrintTokens(FILE* out, TokenList* tokens){
     char* str_symbol = "TOKEN_SYMBOL";
     char* str_quoted = "TOKEN_QUOTED";
     char* str_string = "TOKEN_STRING";
+    char* str_numflt = "TOKEN_NUMFLT";
+    char* str_numint = "TOKEN_NUMINT";
 
     /* Loop until end of list is reached */
     while(tokens != NULL){
@@ -54,6 +61,8 @@ void PrintTokens(FILE* out, TokenList* tokens){
             case TOKEN_SYMBOL: type = str_symbol; break;
             case TOKEN_QUOTED: type = str_quoted; break;
             case TOKEN_STRING: type = str_string; break;
+            case TOKEN_NUMINT: type = str_numint; break;
+            case TOKEN_NUMFLT: type = str_numflt; break;
             default: type = null_str;
         }
 
@@ -78,6 +87,34 @@ void FreeTokens(TokenList* tokens){
         TokenList* next = tokens->next;
         VyFree(tokens);
         tokens = next;
+    }
+}
+
+/* Decide whether it is a symbol, int, or float */
+int FindTokenType(char* data){
+    /* Parse the first number */
+    char* end_ptr;
+    double val = strtod(data, &end_ptr);
+
+    /* If this token is a number, the entire thing will be parsed up to the null terminator  */
+    if(end_ptr[0] != '\0')
+        return TOKEN_SYMBOL;
+    else {
+        /* Check whether it's int or float by comparing values */
+        int int_val = atoi(data);
+        if(int_val == val){
+            /* Even if values are the same, it could be something like 5.0, which should be a double. 
+             * Thus we check for periods (radices) to make sure the user isn't trying to make a float */
+            int i;
+            for(i = 0; i < strlen(data); i++)
+                if(data[i] == '.')
+                    return TOKEN_NUMFLT;
+
+            return TOKEN_NUMINT;
+        }
+        else {
+            return TOKEN_NUMFLT;
+        }
     }
 }
 
@@ -145,6 +182,7 @@ TokenList* LexFile(FILE* file){
                 break;
 
             /* Symbols are anything not dealt with (except whitespace) */
+            /* Additionally, deal with numbers, which are just like symbols except have numeric characters */
             default:
                 if(IsWhitespace(next)) break;
 
@@ -164,7 +202,9 @@ TokenList* LexFile(FILE* file){
                 fseek(file, -char_count - 1, SEEK_CUR);
                 fread(str_data, sizeof(char), char_count, file);
                 
-                TOKEN(t, TOKEN_SYMBOL, str_data);
+                /* Now that we've separated the token out, decide whether it really is a symbol or
+                 * whether it is actually an integer or floating point number */
+                TOKEN(t, FindTokenType(str_data), str_data);
                 tokens = AppendToken(tokens, t);
                 break;
         }

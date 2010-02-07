@@ -7,12 +7,24 @@ extern void LoadList();
 
 extern VyType TypeCons, TypeString, TypeSymbol, TypeFloat, TypeInt, TypeFunction;
 
-typedef struct _VyInt {
+/* Basic number operations, the rest will be in the math lib */
+VyObj CreateFloat(double d){
+    VyFloat* flt = VyMalloc(TypeFloat.size);
+    flt->val = d;
+    return WrapObj(flt, TypeFloat);
+}
+VyObj CreateInt(int d){
+    VyInt* i = VyMalloc(TypeInt.size);
+    i->val = d;
+    return WrapObj(i, TypeInt);
+}
 
-} VyInt;
-typedef struct _VyFloat {
-
-} VyFloat;
+VyObj CreateFloatFromStr(char* str){
+    return CreateFloat(atof(str));
+}
+VyObj CreateIntFromStr(char* str){
+    return CreateInt(atoi(str));
+}
 
 /* Create types */
 void CreateTypes(){

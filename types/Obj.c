@@ -83,6 +83,12 @@ void PrintObj(FILE* file, VyObj obj){
     else if(IsType(obj, TypeSymbol))
         fprintf(file, "%s ", ((VySymbol*) Obj(obj))->symb);
 
+    /* Numbers are just printed */
+    else if(IsType(obj, TypeInt))
+        fprintf(file, "%d ", ((VyInt*) Obj(obj))->val);
+    else if(IsType(obj, TypeFloat))
+        fprintf(file, "%f ", ((VyFloat*) Obj(obj))->val);
+
     /* Recursively print cons cells as lists */
     else if(IsType(obj, TypeCons))
         PrintCons(file, (VyCons*)Obj(obj));

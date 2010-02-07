@@ -12,4 +12,12 @@
  */
 void NewFunction(char* name, char* argument_list, Native function);
 
+/* Numeric structures are necessary */
+typedef struct _VyInt {
+    int val;
+} VyInt;
+typedef struct _VyFloat {
+    double val;
+} VyFloat;
+
 #endif /* EXTERNAL_H */
