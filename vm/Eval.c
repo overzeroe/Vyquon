@@ -1,11 +1,13 @@
 #include "Vyquon.h"
 
+/* Eval front-end: compile to bytecode, then evaluate the bytecode */
 VyObj Eval(VyObj sexp){
     Bytecode* bytecode = Compile(sexp);
     VyObj result = EvalBytecode(bytecode);
     return result;
 }
 
+/* Instructions */
 void PushInstr(VyObj);
 void PopInstr();
 void BindInstr();
@@ -14,21 +16,32 @@ void FuncInstr();
 void CallInstr(int);
 int IfJmpInstr(VyObj);
 
+/* Loop over instructions and evaluate them */
 VyObj EvalBytecode(Bytecode* bytecode){
-    int i;
+    /* The way jumps work is they set the nextInstr ptr to something, and then on the start
+     * of the next loop, we actually jump there, and reset the ptr to nothing. When it's 
+     * negative, we don't care, when it's positive, we jump. */
     int nextInstr = -1;
+
+    int i;
     for(i = 0; i < bytecode->used; i++){
+
         /* Execute jumps from the previous instruction */
         if(nextInstr >= 0){
             i = nextInstr;
             nextInstr = -1;
         }
 
+        /* Current instruction */
         Instruction instr = bytecode->instructions[i];
+
+        /* We can't declare variables inside switch statements. This one is for the CALL opcode */
         int args;
 
+        /* Just call the appropriate function for each opcode */
         switch(instr.opcode){
             case INSTR_PUSH:
+                /* Data: what we are pushing */
                 PushInstr(instr.data);
                 break;
             case INSTR_POP:
@@ -38,34 +51,44 @@ VyObj EvalBytecode(Bytecode* bytecode){
                 BindInstr();
                 break;
             case INSTR_VALUE:
+                /* Data: the variable name */
                 ValueInstr(instr.data);
                 break;
             case INSTR_FUNC:
                 FuncInstr();
                 break;
             case INSTR_CALL:
+                /* Data: how many args are being passed */
                 args = (int)Obj(instr.data);
                 CallInstr(args);
                 break;
+
+            /* The jump instructions modify the jump ptr; we actually do the jump next iteration around. */
             case INSTR_JMP:
                 nextInstr = (int)Obj(instr.data);       
                 break;
             case INSTR_IFNJMP:
                 nextInstr = IfJmpInstr(instr.data);
+
+            /* If it's another opcode type, we're confused as hell. */
             default:    
-                break;
+                fprintf(stderr, "Unknown opcode type, I'm confused.\n");
+                exit(0);
         }
     }
 
+    /* Return whatever was last on the stack */
     return StackPop();
 }
 
+/* Just call the stack Pop and Push functions */
 void PushInstr(VyObj obj){
     StackPush(obj);
 }
 void PopInstr(){
     StackPop();
 }
+
 void BindInstr(){
     VyObj name_obj = StackPop();
     VyObj val = StackPeek();

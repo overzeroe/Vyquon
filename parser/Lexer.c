@@ -1,6 +1,6 @@
 #include "Vyquon.h"
 
-/* Is newline, tab, or space */
+/* Is this character a newline, tab, or space? */
 inline bool IsWhitespace(char c){
     return c == ' ' || c == '\t' || c == '\n';
 }
@@ -32,7 +32,9 @@ TokenList* AppendToken(TokenList* list, Token token){
     return next;
 }
 
-/* Debugging */
+
+#ifdef DEBUG
+/* Print tokens in some human-readable way */
 void PrintTokens(FILE* out, TokenList* tokens){
     /* Print data */
     char* null_str = "NULL";
@@ -65,6 +67,7 @@ void PrintTokens(FILE* out, TokenList* tokens){
         tokens = tokens->next;
     }
 }
+#endif /* DEBUG */
 
 /* Free memory */
 void FreeTokens(TokenList* tokens){
@@ -77,7 +80,6 @@ void FreeTokens(TokenList* tokens){
         tokens = next;
     }
 }
-
 
 /* Read tokens from a text file */
 TokenList* LexFile(FILE* file){
@@ -175,9 +177,12 @@ TokenList* LexFile(FILE* file){
     return list_start;
 }
 
+/* Read tokens from a string */
 TokenList* LexString(char* string){
+    /* Open a file stream to the memory in which the string is stored */
     FILE* file = fmemopen(string, strlen(string), "r");
     TokenList* tokens = LexFile(file);
+
     fclose(file);
     return tokens;
 }

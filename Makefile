@@ -20,9 +20,17 @@ ${EXECUTABLE}: ${ALLFILES}
 Vyquon.o: 
 	${CMD} Vyquon.c -o bin/Vyquon.o
 
+# The lexer and parser
+Lexer.o: 
+	${CMD} parser/Lexer.c -o bin/Lexer.o
+Parser.o: 
+	${CMD} parser/Parser.c -o bin/Parser.o
+
+# Memory and GC files
 Mem.o: 
 	${CMD} mem/Mem.c -o bin/Mem.o
 
+# Runtime and VM
 Eval.o: 
 	${CMD} vm/Eval.c -o bin/Eval.o
 Stack.o: 
@@ -32,9 +40,7 @@ Bytecode.o:
 Scope.o: 
 	${CMD} vm/Scope.c -o bin/Scope.o
 
-
-
-
+# Object types
 Cons.o: 
 	${CMD} types/Cons.c -o bin/Cons.o
 String.o: 
@@ -46,18 +52,13 @@ Function.o:
 Obj.o: 
 	${CMD} types/Obj.c -o bin/Obj.o
 
+# External libraries and addons
 External.o: 
 	${CMD} external/External.c -o bin/External.o
 Lib.o: 
 	${CMD} external/Lib.c -o bin/Lib.o
 IO.o: 
 	${CMD} external/IO.c -o bin/IO.o
-
-
-Lexer.o: 
-	${CMD} parser/Lexer.c -o bin/Lexer.o
-Parser.o: 
-	${CMD} parser/Parser.c -o bin/Parser.o
 
 # Clean out the project and delete all .o files
 clean:

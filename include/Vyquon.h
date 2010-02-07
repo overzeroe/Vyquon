@@ -1,13 +1,15 @@
 #ifndef VYQUON_H
 #define VYQUON_H
 
-#define DEBUG 
+#define DEBUG true
+
+/* Debug mode enables a few useful macros */
 #ifdef DEBUG
+/* DEBUG_PRINT - print a message, flush the buffer. */
 #define DEBUG_PRINT(a) {printf(a); fflush(stdout);}
 #endif
 
-/* Define data types */
-typedef int ObjType;
+/* Define boolean data types */
 #define true TRUE
 #define false FALSE
 
@@ -17,7 +19,7 @@ typedef int ObjType;
 #include "string.h"
 
 /* External libraries */
-#include "gdsl.h"
+#include "gdsl.h"      
 
 /* Memory management and garbage collection */
 #include "Mem.h"

@@ -1,6 +1,8 @@
 #include "Vyquon.h"
 
+/* Register a new function with the runtime */
 void NewFunction(char* name, char* argument_list, Native function){
+    /* Create a symbol for the name */
     VySymbol* symbol_name = (VySymbol*) Obj(CreateSymbol(name));
 
     /* Parse the argument list */
