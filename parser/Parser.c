@@ -62,6 +62,11 @@ VyObj Parse(TokenList* tokens, TokenList** used) {
             *used = tokens->next;
             return CreateIntFromStr(first.data);
 
+        /* Undefined tokens only occur if there are no tokens */
+        case TOKEN_NOTDEF:
+            fprintf(stderr, "Error: No code in the file.\n");
+            exit(0);
+
         /* Error! We shouldn't have other token types. */
         default:
             fprintf(stderr, "Error: Unexpected token type\n");

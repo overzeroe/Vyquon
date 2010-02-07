@@ -139,6 +139,7 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
             
             /* An if form of the form (if condition then-clause [else-clause]) */
             else if(ObjEq(symbol, SymbolIf)){
+                DEBUG_PRINT("Emitting IF\n");
                 special_form = true;
 
                 /* The bytecode for the if form looks like this:
@@ -157,6 +158,7 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
                 bool has_else_clause = (ListLen(obj) == 4);
 
                 /* Push condition evaluation onto stack */
+                DEBUG_PRINT("Condition\n");
                 bytecode = CompileExpr(bytecode, ListGet(cons, 1));
                
                 /* Generate placeholder instructions - we can't actually issue the real ones because we don't know
@@ -168,6 +170,7 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
                 Instruction* if_jmp_placeholder = &bytecode->instructions[bytecode->used - 1];
 
                 /* Now compile the then-clause */
+                DEBUG_PRINT("Then-clause\n");
                 bytecode = CompileExpr(bytecode, ListGet(cons, 2));
 
                 /* Repeat what we did previously with the placeholder instruction */
@@ -180,6 +183,7 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
 
                 /* If it has an else, use it, otherwise, make 'nil the else */
                 if(has_else_clause){
+                    DEBUG_PRINT("Else-clause\n");
                     bytecode = CompileExpr(bytecode, ListGet(cons, 3));
                 } 
                 

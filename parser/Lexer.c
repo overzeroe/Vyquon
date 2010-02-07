@@ -139,6 +139,12 @@ TokenList* LexFile(FILE* file){
         char* str_data = NULL;
 
         switch(next){
+            /* Skip comments */
+            case ';':
+                while(next != '\n'){
+                    next = fgetc(file);
+                }
+                break;
             /* Process single-character tokens */
             case '(':
                 TOKEN(t, TOKEN_OPAREN, str_data);

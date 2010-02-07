@@ -32,8 +32,13 @@ VyObj EvalBytecode(Bytecode* bytecode){
             nextInstr = -1;
         }
 
+        /* If we're jumping out of the block, means we're done */
+        if(i >= bytecode->used)
+            break;
+
         /* Current instruction */
         Instruction instr = bytecode->instructions[i];
+        printf("Instr %d\n", instr.opcode);
 
         /* Just call the appropriate function for each opcode */
         switch(instr.opcode){
@@ -61,7 +66,7 @@ VyObj EvalBytecode(Bytecode* bytecode){
 
             /* The jump instructions modify the jump ptr; we actually do the jump next iteration around. */
             case INSTR_JMP:
-                nextInstr = instr.data.num;
+                nextInstr = instr.data.num  +1;
                 break;
             case INSTR_IFNJMP:
                 nextInstr = IfJmpInstr(instr.data.num);
@@ -69,7 +74,7 @@ VyObj EvalBytecode(Bytecode* bytecode){
 
             /* If it's another opcode type, we're confused as hell. */
             default:    
-                fprintf(stderr, "Unknown opcode type, I'm confused.\n");
+                fprintf(stderr, "Unknown opcode type (%d), I'm confused.\n", instr.opcode);
                 exit(0);
         }
     }
