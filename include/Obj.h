@@ -35,6 +35,9 @@ VyType CreateType(int size, struct _VySymbol* name);
 /* Create an object pointing to some data of a certain type */
 VyObj WrapObj(void*,VyType);
 
+/* Compare two objects */
+bool ObjEq(VyObj, VyObj);
+
 /* The None object is a hack for times when we have to pass some object.
  * It means nothing. It can be used to check for things, though, like ends
  * of lists. In general, don't use it.

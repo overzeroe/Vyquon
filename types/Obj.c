@@ -25,6 +25,11 @@ VyType CreateType(int size, VySymbol* type_name){
     return new_type;
 }
 
+/* Two objects are equal if their types and data are the same */
+bool ObjEq(VyObj one, VyObj two){
+    return Obj(one) == Obj(two) && SymbolEq(Type(one).name, Type(two).name);
+}
+
 
 /* Create an empty object */
 VyObj None(){
@@ -38,9 +43,7 @@ inline bool IsNone(VyObj obj){
 
 /* Evaluate the truthiness of a value. 'false and nil are false, everything else is true. */
 bool IsTrue(VyObj value){
-    if(IsNil(value))
-        return false;
-    if(IsType(value, TypeSymbol) && SymbolEq((VySymbol*) Obj(value), "false"))
+    if(IsNil(value) || ObjEq(value, SymbolFalse))
         return false;
     return true;
 }

@@ -198,9 +198,13 @@ TokenList* LexFile(FILE* file){
                     next = fgetc(file);
                 }
 
-                str_data = VyMalloc(sizeof(char) * char_count);
+                /* Read the token from a file, but remember to allocate an extra byte for the null terminator */
+                str_data = VyMalloc(sizeof(char) * (char_count + 1));
                 fseek(file, -char_count - 1, SEEK_CUR);
-                fread(str_data, sizeof(char), char_count, file);
+                fread(str_data, sizeof(char), char_count - 0, file);
+
+                str_data[char_count] = '\0';
+
                 
                 /* Now that we've separated the token out, decide whether it really is a symbol or
                  * whether it is actually an integer or floating point number */

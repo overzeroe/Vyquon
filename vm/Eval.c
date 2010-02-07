@@ -65,6 +65,7 @@ VyObj EvalBytecode(Bytecode* bytecode){
                 break;
             case INSTR_IFNJMP:
                 nextInstr = IfJmpInstr(instr.data.num);
+                break;
 
             /* If it's another opcode type, we're confused as hell. */
             default:    

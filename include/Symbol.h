@@ -19,7 +19,10 @@ VyObj CreateSymbol(char*);
 /* Create a symbol but don't return it as an object (rarely needed) */
 VySymbol* CreateSymbol_NoObj(char*);
 
-/* Check for symbol equality... this should not be comparing a symbol to a char* (for reasons mentioned above) */
-bool SymbolEq(VySymbol*, char*);
+/* Check for symbol equality */
+bool SymbolEq(VySymbol*, VySymbol*);
+
+/* A few widely used symbols */
+VyObj SymbolFalse, SymbolIf, SymbolSetvar, SymbolWhile, SymbolNil, SymbolQuote, SymbolFn;
 
 #endif /* SYMBOL_H */

@@ -93,10 +93,10 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
 
         /* All special forms have a symbol as the car */
         if(IsType(Car(obj), TypeSymbol)){
-            VySymbol* symbol = (VySymbol*)Obj(Car(obj));
+            VyObj symbol = Car(obj);
 
             /* Quoted forms are also just PUSH'd onto the stack */
-            if(SymbolEq(symbol, "quote")){
+            if(ObjEq(symbol, SymbolQuote)){
                 special_form = true;
                 
                 /* ... is the cadr of (quote ...); */
@@ -105,7 +105,7 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
             } 
             
             /* Set the variable specified the by 1st expression to the value of the 2nd expression */
-            else if(SymbolEq(symbol, "setvar")){
+            else if(ObjEq(symbol, SymbolSetvar)){
                 special_form = true;
                 
                 /* Name is the first expression, but it doesn't have to be a symbol; 
@@ -123,7 +123,7 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
             } 
             
             /* fn is the renamed lambda */
-            else if(SymbolEq(symbol, "fn")){
+            else if(ObjEq(symbol, SymbolFn)){
                 special_form = true;
 
                 VyObj arg_list = ListGet(cons, 1);
@@ -138,7 +138,7 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
             } 
             
             /* An if form of the form (if condition then-clause [else-clause]) */
-            else if(SymbolEq(symbol, "if")){
+            else if(ObjEq(symbol, SymbolIf)){
                 special_form = true;
 
                 /* The bytecode for the if form looks like this:
@@ -195,7 +195,7 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
             } 
             
             /* A while form of the form (while condition [statements]*) */
-            else if(SymbolEq(symbol, "while")){
+            else if(ObjEq(symbol, SymbolWhile)){
                 special_form = true;
 
                 /* The bytecode for a while loop looks like this:
@@ -222,9 +222,9 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
                 Instruction* if_jmp_placeholder = &bytecode->instructions[bytecode->used - 1];
 
                 /* Compile loop body */
-                int i = 0, len = ListLen(obj) - 1;
-                for(i = 0; i < len; i++){
-                    bytecode = CompileExpr(bytecode, ListGet(cons, i + 1));
+                int i = 2, len = ListLen(obj);
+                for(i = 2; i < len; i++){
+                    bytecode = CompileExpr(bytecode, ListGet(cons, i));
 
                     /* We do not want a pileup of values on the stack, so pop them off */
                     /* Sadly this means that we can't make the last statement be returned, so while's return nil */
