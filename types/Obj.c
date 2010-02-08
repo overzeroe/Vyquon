@@ -41,13 +41,6 @@ inline bool IsNone(VyObj obj){
     return IsType(obj, TypeNone);
 }
 
-/* Evaluate the truthiness of a value. 'false and nil are false, everything else is true. */
-bool IsTrue(VyObj value){
-    if(IsNil(value) || ObjEq(value, SymbolFalse))
-        return false;
-    return true;
-}
-
 #ifdef DEBUG
 void PrintObj(FILE*, VyObj);
 

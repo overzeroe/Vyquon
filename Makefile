@@ -6,7 +6,7 @@ EXECUTABLE	= vyquon
 CMDLINK		= ${COMPILER} -lm -L/usr/local/lib/ -lgdsl -o ${EXECUTABLE} ${ARGS}		# Link the .o files into an executable
 CMD		= ${COMPILER} -c ${ARGS}				# Don't link, just compile to .o
 
-ALLFILES 	= Lexer.o Mem.o Vyquon.o Parser.o Cons.o String.o Symbol.o Function.o Obj.o Eval.o Stack.o Bytecode.o Scope.o External.o Lib.o IO.o Math.o List.o
+ALLFILES 	= Lexer.o Mem.o Vyquon.o Parser.o Cons.o String.o Symbol.o Function.o Obj.o Eval.o Stack.o Bytecode.o Scope.o External.o Lib.o IO.o Math.o List.o Bool.o
 
 # Top level rule, compile whole program
 all: ${EXECUTABLE}
@@ -64,6 +64,8 @@ IO.o:
 	${CMD} external/IO.c -o bin/IO.o
 Math.o: 
 	${CMD} external/Math.c -o bin/Math.o
+Bool.o: 
+	${CMD} external/Bool.c -o bin/Bool.o
 List.o: 
 	${CMD} external/List.c -o bin/List.o
 

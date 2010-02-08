@@ -12,6 +12,21 @@
  */
 void NewFunction(char* name, char* argument_list, Native function);
 
+/* The true and false boolean values */
+VyObj TrueObj();
+VyObj FalseObj();
+
+/* Check whether a given object represents truth. We accept two things as
+ * false: the symbol 'false and nil. (Nil may have multiple meanings. See Cons.h)
+ * Everything that isn't false is true, including 'FALSE and 'False and 0.
+ */
+bool IsTrue(VyObj);
+bool IsFalse(VyObj);
+
+/* Provide external libraries with a convenient way to access things inside objects */
+#define UNWRAP(__x, __type) ((__type*) Obj(__x))
+
+
 /* Numeric structures are necessary */
 typedef struct _VyInt {
     int val;
@@ -19,5 +34,8 @@ typedef struct _VyInt {
 typedef struct _VyFloat {
     double val;
 } VyFloat;
+
+VyObj CreateInt(int);
+VyObj CreateFloat(double);
 
 #endif /* EXTERNAL_H */

@@ -4,6 +4,7 @@
 extern void LoadIO();
 extern void LoadMath();
 extern void LoadList();
+extern void LoadBool();
 
 extern VyType TypeCons, TypeString, TypeSymbol, TypeFloat, TypeInt, TypeFunction;
 
@@ -57,6 +58,8 @@ void LoadCoreLibrary(){
     CreateSymbols();
 
     LoadMath();
+    LoadBool();
     LoadList();
     LoadIO();
 }
+

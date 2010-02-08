@@ -108,6 +108,7 @@ void FuncInstr(){
 }
 int IfJmpInstr(int ifFalse){
     VyObj condition_value = StackPop();
+
     if(IsTrue(condition_value))
         return -1;
     else
@@ -115,7 +116,8 @@ int IfJmpInstr(int ifFalse){
 }
 
 void CallInstr(int num_args){
-    VyFunction* func = (VyFunction*) Obj(StackPop());
+    VyObj func_obj = StackPop();
+    VyFunction* func = (VyFunction*) Obj(func_obj);
 
     VyObj arguments[num_args];
     int i;

@@ -176,9 +176,12 @@ TokenList* LexFile(FILE* file){
                 }
 
                 /* Allocate memory for string and read from file */
-                char* str_data = VyMalloc(sizeof(char) * char_count);
+                char* str_data = VyMalloc(sizeof(char) * (char_count + 1));
                 fseek(file, -char_count - 1, SEEK_CUR);
                 fread(str_data, sizeof(char), char_count, file);
+
+                /* End the string! */
+                str_data[char_count] = '\0';
 
                 /* Skip end quote */
                 fgetc(file);

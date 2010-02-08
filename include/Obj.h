@@ -47,12 +47,6 @@ VyObj None();
 /* Check if something is the none object */
 bool IsNone(VyObj);
 
-/* Check whether a given object represents truth. We accept two things as
- * false: the symbol 'false and nil. (Nil may have multiple meanings. See Cons.h)
- * Everything that isn't false is true, including 'FALSE and 'False and 0.
- */
-bool IsTrue(VyObj);
-
 /* Print a human-readable (if possible) reprentation of an object to a file */
 void PrintObj(FILE*, VyObj);
 

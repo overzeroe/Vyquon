@@ -7,10 +7,11 @@ VyObj GetCdr(VyObj*, int);
 
 /* Initialize the IO functions and library */
 void LoadList(){
-    NewFunction("cons", "(x y)", &MakeCons);
+    NewFunction("pair", "(x y)", &MakeCons);
     NewFunction("list", "(... all)", &MakeList);
-    NewFunction("car",  "(lst)", &GetCar);
-    NewFunction("cdr",  "(lst)", &GetCdr);
+
+    NewFunction("first",  "(lst)", &GetCar);
+    NewFunction("rest",  "(lst)", &GetCdr);
 }
 
 VyObj MakeCons(VyObj* values, int num_args){

@@ -112,11 +112,11 @@ Bytecode* CompileExpr(Bytecode* bytecode, VyObj expr){
                    Name could be computed with a function call or something, so compile the expression */
                 VyObj name = ListGet(cons, 1);
 
+                /* Compile the value expression first so it is on the bottom of the stack and can be left ther e*/
+                CompileExpr(bytecode, ListGet(cons, 2));
+
                 /* The name is a symbol which is pushed onto the stack */
                 CompileExpr(bytecode, name);
-
-                /* Compile the second expression so that the thing that should be bound to the name is on the stack */
-                CompileExpr(bytecode, ListGet(cons, 2));
 
                 /* The bind instruction will pop the name and value off the stack and bind them into darkness */
                 INSTR(Bind());
