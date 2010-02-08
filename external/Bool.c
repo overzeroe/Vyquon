@@ -38,8 +38,19 @@ VyObj NotFun(VyObj* objs, int num){
 }
 
 
+VyObj EqFun(VyObj* objs, int num){
+    VyObj first = objs[0];
+    int i;
+    for(i = 1; i < num; i++)
+        if(!ObjEq(first, objs[i]))
+            return FalseObj();
+
+    return TrueObj();
+}
+
 void LoadBool(){
     NewFunction("and", "(... vals)", &AndFun);
     NewFunction("or", "(... vals)", &OrFun);
     NewFunction("not", "(val)", &NotFun);
+    NewFunction("is", "(.. vals)", &EqFun);
 }

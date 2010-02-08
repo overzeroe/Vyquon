@@ -41,8 +41,13 @@ VyObj VariableValue(VySymbol* symb){
      * but if it isn't there, check the parent scope, and repeat.
      */
     Scope* current = CurrentScope();
-    while(!g_hash_table_lookup(current->var_values, symb->symb))
+    while(!g_hash_table_lookup(current->var_values, symb->symb)){
         current = current->parent;
+        if(!current){
+            printf("Failed to find: %s\n", symb->symb);
+            fflush(stdout);
+        }
+    }
 
     /* Get the value and type from the individual hash tables */
     gpointer value = g_hash_table_lookup(current->var_values, symb->symb);

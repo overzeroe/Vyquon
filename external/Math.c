@@ -118,7 +118,7 @@ bool NumEq(VyObj one, VyObj two){
     return num_two == num_one;
 }
 
-VyObj EqFun(VyObj* objs, int num){
+VyObj NumEqFun(VyObj* objs, int num){
     VyObj first = objs[0];
     int i;
     for(i = 1; i < num; i++)
@@ -139,5 +139,5 @@ void LoadMath(){
     NewFunction("-", "(... vals)", &SubFun);
     NewFunction("*", "(... vals)", &MulFun);
     NewFunction("/", "(a b)", &DivFun);
-    NewFunction("=", "(a b .. vals)", &EqFun);
+    NewFunction("=", "(a b .. vals)", &NumEqFun);
 }
