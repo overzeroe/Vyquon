@@ -25,4 +25,7 @@ bool SymbolEq(VySymbol*, VySymbol*);
 /* A few widely used symbols */
 VyObj SymbolFalse, SymbolIf, SymbolSetvar, SymbolWhile, SymbolNil, SymbolQuote, SymbolFn;
 
+/* Delete symbols that have been interned (all of them) */
+void DeleteInternedSymbols();
+
 #endif /* SYMBOL_H */

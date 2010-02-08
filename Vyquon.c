@@ -4,6 +4,7 @@
 
 /* Library loading is done somewhere else in external/ */
 extern void LoadCoreLibrary();
+void FinishRuntime();
 
 int main(){
     /* Load library */
@@ -29,6 +30,14 @@ int main(){
 
     FreeTokens(tokens);
 
+    /* Finalize */
+    FinishRuntime();
+
     /* Exit */
     return 0;
+}
+
+/* Close all open resources and such */
+void FinishRuntime(){
+    DeleteInternedSymbols();
 }

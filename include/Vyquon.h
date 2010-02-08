@@ -20,6 +20,7 @@
 
 /* External libraries */
 #include "gdsl.h"      
+#include <glib.h>
 
 /* Memory management and garbage collection */
 #include "Mem.h"

@@ -43,6 +43,9 @@ typedef struct _Bytecode {
 /* Compile a parse tree (a list) to bytecode */
 Bytecode* Compile(VyObj);
 
+/* Delete bytecode created by the compiler */
+void FreeBytecode(Bytecode*);
+
 /* Evaluate the bytecode to produce an object */
 VyObj EvalBytecode(Bytecode*);
 

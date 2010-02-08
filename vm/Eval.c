@@ -4,6 +4,7 @@
 VyObj Eval(VyObj sexp){
     Bytecode* bytecode = Compile(sexp);
     VyObj result = EvalBytecode(bytecode);
+    FreeBytecode(bytecode);
     return result;
 }
 

@@ -1,4 +1,7 @@
 (setvar 'nil 'nil)
+(setvar 'false 'false)
+(setvar 'true 'true)
+
 (setvar 'number? 
     (fn (x)
         (or (int? x) (float? x))))
@@ -9,7 +12,5 @@
            (/ (+ a b) 2)
            nil)))
 
-(average-2 4 8)
-(average-2 3 'Hello)
-(average-2 'Goodbye "here")
+(average-2 100 200)
 

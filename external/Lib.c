@@ -42,13 +42,13 @@ void CreateTypes(){
 /* Create commonly-used symbols */
 extern VyObj SymbolFalse, SymbolIf, SymbolSetvar, SymbolWhile, SymbolNil, SymbolQuote, SymbolFn;
 void CreateSymbols(){
+    SymbolFn        = CreateSymbol("fn");
     SymbolFalse     = CreateSymbol("false");
     SymbolIf        = CreateSymbol("if");
     SymbolSetvar    = CreateSymbol("setvar");
     SymbolWhile     = CreateSymbol("while");
     SymbolNil       = CreateSymbol("nil");
     SymbolQuote     = CreateSymbol("quote");
-    SymbolFn        = CreateSymbol("fn");
 }
 
 /* Load the core library */

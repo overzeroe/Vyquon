@@ -1,6 +1,6 @@
 #include "Vyquon.h"
 
-/* Create a new bytecode object */
+/* Create/delete a bytecode object */
 Bytecode* CreateBytecode(){
     Bytecode* bytecode = VyMalloc(sizeof(Bytecode));
 
@@ -9,6 +9,10 @@ Bytecode* CreateBytecode(){
     bytecode->used = 0;
     bytecode->instructions = VyMalloc(sizeof(Instruction) * bytecode->size);
     return bytecode;
+}
+void FreeBytecode(Bytecode* bytecode){
+    VyFree(bytecode->instructions);
+    VyFree(bytecode);
 }
 
 /* Increase size of bytecode */

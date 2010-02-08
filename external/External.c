@@ -7,7 +7,8 @@ void NewFunction(char* name, char* argument_list, Native function){
 
     /* Parse the argument list */
     TokenList* tokens = LexString(argument_list);
-    VyObj parsed = Parse(tokens, &tokens);
+    TokenList* end;
+    VyObj parsed = Parse(tokens, &end);
     ArgList arguments = ParseArgList(parsed);
     FreeTokens(tokens);
 
