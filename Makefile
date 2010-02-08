@@ -1,9 +1,9 @@
 
 # The compiler used and the command line arguments to it
 COMPILER	= gcc
-ARGS		= -Wall -I include/ -g -I/usr/local/include/gdsl  -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include
+ARGS		= -Wall -I include/ -g -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include
 EXECUTABLE	= vyquon
-CMDLINK		= ${COMPILER} -lm -L/usr/local/lib/ -lgdsl -lglib-2.0 -o ${EXECUTABLE} ${ARGS}		# Link the .o files into an executable
+CMDLINK		= ${COMPILER} -lm -L/usr/local/lib/ -L/usr/lib -lglib-2.0 -o ${EXECUTABLE} ${ARGS}		# Link the .o files into an executable
 CMD		= ${COMPILER} -c ${ARGS}				# Don't link, just compile to .o
 
 ALLFILES 	= Lexer.o Mem.o Vyquon.o Parser.o Cons.o String.o Symbol.o Function.o Obj.o Eval.o Stack.o Bytecode.o Scope.o External.o Lib.o IO.o Math.o List.o Bool.o

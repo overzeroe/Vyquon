@@ -4,7 +4,7 @@
 struct _Scope {
     Scope* parent;
 
-    /* We use the GDSL library for our hashing. 
+    /* We use the Glib hash library for our hashing. 
      * Sadly, their library hash stores void*s, and we want to store VyObj, so we
      * separately store variable values and variable types in two different hashes.
      * This will be changed to be sane eventually.

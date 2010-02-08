@@ -10,8 +10,9 @@
 #endif
 
 /* Define boolean data types */
-#define true TRUE
-#define false FALSE
+typedef int bool;
+#define true 1
+#define false 0
 
 /* Include standard library */
 #include "stdio.h"
@@ -19,8 +20,7 @@
 #include "string.h"
 
 /* External libraries */
-#include "gdsl.h"      
-#include <glib.h>
+#include "glib.h"
 
 /* Memory management and garbage collection */
 #include "Mem.h"
