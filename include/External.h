@@ -38,4 +38,7 @@ typedef struct _VyFloat {
 VyObj CreateInt(int);
 VyObj CreateFloat(double);
 
+/* Check for numeric equality */
+bool NumEq(VyObj, VyObj);
+
 #endif /* EXTERNAL_H */

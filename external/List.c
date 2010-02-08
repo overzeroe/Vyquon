@@ -4,6 +4,7 @@ VyObj MakeCons(VyObj*, int);
 VyObj MakeList(VyObj*, int);
 VyObj GetCar(VyObj*, int);
 VyObj GetCdr(VyObj*, int);
+VyObj GetListLen(VyObj*, int);
 
 /* Initialize the IO functions and library */
 void LoadList(){
@@ -12,6 +13,8 @@ void LoadList(){
 
     NewFunction("first",  "(lst)", &GetCar);
     NewFunction("rest",  "(lst)", &GetCdr);
+
+    NewFunction("length", "(lst)", &GetListLen);
 }
 
 VyObj MakeCons(VyObj* values, int num_args){
@@ -29,4 +32,8 @@ VyObj GetCar(VyObj* values, int num_args){
 }
 VyObj GetCdr(VyObj* values, int num_args){
     return Cdr(values[0]);
+}
+
+VyObj GetListLen(VyObj* values, int num_args){
+    return CreateInt(ListLen(values[0]));
 }

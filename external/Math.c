@@ -54,7 +54,7 @@ VyObj SubFun(VyObj* objs, int num){
 
     bool integral = IsType(objs[0], TypeInt);
     int i;
-    for(i = 0; i < num; i++){
+    for(i = 1; i < num; i++){
         if(IsType(objs[i], TypeInt))
             sum -= UNWRAP(objs[i], VyInt)->val;
         if(IsType(objs[i], TypeFloat)) {
@@ -74,9 +74,9 @@ VyObj MulFun(VyObj* objs, int num){
     int i;
     for(i = 0; i < num; i++){
         if(IsType(objs[i], TypeInt))
-            product += UNWRAP(objs[i], VyInt)->val;
+            product *= UNWRAP(objs[i], VyInt)->val;
         if(IsType(objs[i], TypeFloat)) {
-            product += UNWRAP(objs[i], VyFloat)->val;
+            product *= UNWRAP(objs[i], VyFloat)->val;
             integral = false;
         }
     }
@@ -102,6 +102,32 @@ VyObj DivFun(VyObj* objs, int num){
     return CreateFloat(num_one/num_two);
 }
 
+bool NumEq(VyObj one, VyObj two){
+    float num_one; 
+    if(IsType(one, TypeInt))
+        num_one = UNWRAP(one, VyInt)->val;
+    if(IsType(one, TypeFloat))
+        num_one = UNWRAP(one, VyFloat)->val;
+
+    float num_two; 
+    if(IsType(two, TypeInt))
+        num_two = UNWRAP(two, VyInt)->val;
+    if(IsType(two, TypeFloat))
+        num_two = UNWRAP(two, VyFloat)->val;
+
+    return num_two == num_one;
+}
+
+VyObj EqFun(VyObj* objs, int num){
+    VyObj first = objs[0];
+    int i;
+    for(i = 1; i < num; i++)
+        if(!NumEq(first, objs[i]))
+            return FalseObj();
+
+    return TrueObj();
+}
+
 /* Initialize the IO functions and library */
 void LoadMath(){
     /* Predicates */
@@ -113,4 +139,5 @@ void LoadMath(){
     NewFunction("-", "(... vals)", &SubFun);
     NewFunction("*", "(... vals)", &MulFun);
     NewFunction("/", "(a b)", &DivFun);
+    NewFunction("=", "(a b .. vals)", &EqFun);
 }

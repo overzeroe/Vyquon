@@ -45,7 +45,7 @@ typedef struct _VyFunction {
         Native native;
     } code;
     bool native;
-    Scope* live_scope;
+    Scope* creation_scope;
 } VyFunction;
 
 

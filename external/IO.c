@@ -1,10 +1,13 @@
 #include "Vyquon.h"
 
-VyObj NativeFunction(VyObj* args, int num_args){
-    return Nil();
+VyObj PrintObjFun(VyObj* args, int num_args){
+    PrintObj(stdout, args[0]);
+    printf(" ");
+    fflush(stdout);
+    return args[0];
 }
 
 /* Initialize the IO functions and library */
 void LoadIO(){
-    NewFunction("native-function", "()", &NativeFunction);
+    NewFunction("print", "(a)", &PrintObjFun);
 }

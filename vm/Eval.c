@@ -39,6 +39,14 @@ VyObj EvalBytecode(Bytecode* bytecode){
 
         /* Current instruction */
         Instruction instr = bytecode->instructions[i];
+        /*
+        printf("OPCODE %d ", instr.opcode);
+        if(instr.opcode == INSTR_PUSH)
+            PrintObj(stdout, instr.data.obj);
+        else if(instr.opcode == INSTR_VALUE)
+            PrintObj(stdout, instr.data.obj);
+        printf("\n");
+        */
 
         /* Just call the appropriate function for each opcode */
         switch(instr.opcode){
@@ -66,7 +74,7 @@ VyObj EvalBytecode(Bytecode* bytecode){
 
             /* The jump instructions modify the jump ptr; we actually do the jump next iteration around. */
             case INSTR_JMP:
-                nextInstr = instr.data.num  +1;
+                nextInstr = instr.data.num;
                 break;
             case INSTR_IFNJMP:
                 nextInstr = IfJmpInstr(instr.data.num);
@@ -105,13 +113,14 @@ void ValueInstr(VyObj obj){
 void FuncInstr(){
     VyObj func_obj = StackPeek();
     VyFunction* func = (VyFunction*) Obj(func_obj);
-    func->live_scope = CreateScope(CurrentScope());
+    func->creation_scope = CurrentScope();
 }
 int IfJmpInstr(int ifFalse){
     VyObj condition_value = StackPop();
 
     if(IsTrue(condition_value))
         return -1;
+   
     else
         return ifFalse;
 }
@@ -126,14 +135,27 @@ void CallInstr(int num_args){
         arguments[i] = StackPop();
     }
 
+
+/*
+    if(ObjEq(func_obj, VariableValue(CreateSymbol_NoObj("="))))printf("\nRead args:\n");
+    for(i = 0; i < num_args; i++){
+        if(ObjEq(func_obj, VariableValue(CreateSymbol_NoObj("=")))){
+            printf("Obj %d: ", i);
+            PrintObj(stdout, arguments[i]);
+            printf("\n");
+        }
+    }
+ */
+        
     if(!func->native){
         Scope* caller_scope = CurrentScope();
-        EnterScope(func->live_scope);
+        Scope* new_scope = CreateScope(func->creation_scope);
+        EnterScope(new_scope);
 
         BindArguments(func->arguments, arguments, num_args);
 
         VyObj return_val = EvalBytecode(func->code.bytecode);
-        ClearScope(func->live_scope);
+        DeleteScope(new_scope);
         EnterScope(caller_scope);
         StackPush(return_val);
     } else {

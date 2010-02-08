@@ -26,8 +26,8 @@ Scope* CreateScope(Scope* parent);
 /* Set a given scope as the current scope */
 void EnterScope(Scope*);
 
-/* Delete all elements in the scope so it can be reused */
-void ClearScope(Scope*);
+/* Delete a scope */
+void DeleteScope(Scope*);
 
 /* Get the value of a variable or bind a value to a variable */
 VyObj VariableValue(VySymbol*);

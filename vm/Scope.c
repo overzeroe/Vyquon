@@ -66,8 +66,9 @@ void VariableBind(VySymbol* symb, VyObj obj){
 void EnterScope(Scope* scope){
     current_scope = scope;
 }
-void ClearScope(Scope* scope){
-    g_hash_table_remove_all(scope->var_values);
-    g_hash_table_remove_all(scope->type_values);
-    g_hash_table_remove_all(scope->size_values);
+void DeleteScope(Scope* scope){
+    g_hash_table_destroy(scope->var_values);
+    g_hash_table_destroy(scope->type_values);
+    g_hash_table_destroy(scope->size_values);
+    VyFree(scope);
 }
