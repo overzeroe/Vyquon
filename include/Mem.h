@@ -11,11 +11,12 @@
  * thus allowing the user to bypass garbage collection if desired.
  */
 
-/* Allocate memory for the VM */
+/* Allocate memory on the heap */
 void* VyMalloc(size_t size);
-void* VyRealloc(void*, size_t size);
 
-/* Free memory allocated */
-void VyFree(void* ptr);
+/* Allocate memory away from the heap  */
+void* VyNoHeapMalloc(size_t);
+void* VyNoHeapRealloc(void*, size_t);
+void  VyNoHeapFree(void* ptr);
 
 #endif /* MEM_H */

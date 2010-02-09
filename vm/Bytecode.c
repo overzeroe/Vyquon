@@ -2,17 +2,17 @@
 
 /* Create/delete a bytecode object */
 Bytecode* CreateBytecode(){
-    Bytecode* bytecode = VyMalloc(sizeof(Bytecode));
+    Bytecode* bytecode = VyNoHeapMalloc(sizeof(Bytecode));
 
     /* Initial size of 1024 instructions was arbitrary; experiments should be done to find better value perhaps */
     bytecode->size = 1024;
     bytecode->used = 0;
-    bytecode->instructions = VyMalloc(sizeof(Instruction) * bytecode->size);
+    bytecode->instructions = VyNoHeapMalloc(sizeof(Instruction) * bytecode->size);
     return bytecode;
 }
 void FreeBytecode(Bytecode* bytecode){
-    VyFree(bytecode->instructions);
-    VyFree(bytecode);
+    VyNoHeapFree(bytecode->instructions);
+    VyNoHeapFree(bytecode);
 }
 
 /* Increase size of bytecode */
@@ -21,7 +21,7 @@ void ExpandBytecode(Bytecode* bytecode){
     bytecode->size *= 2;
 
     /* Multiply size by a constant and reallocate that much */
-    bytecode->instructions = VyRealloc(bytecode->instructions, sizeof(Instruction) * bytecode->size);
+    bytecode->instructions = VyNoHeapRealloc(bytecode->instructions, sizeof(Instruction) * bytecode->size);
 }
 
 /* Add another instruction to the bytecode */

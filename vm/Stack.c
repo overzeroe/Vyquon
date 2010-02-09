@@ -9,14 +9,14 @@ int stack_index = 0;
 
 /* Create the stack */
 void InitStack(){
-    stack = VyMalloc(sizeof(VyObj) * stack_size);
+    stack = VyNoHeapMalloc(sizeof(VyObj) * stack_size);
     stack_index = 0;
 }
 
 /* Expand the stack - multiply size by 2 */
 void ExpandStack(){
     stack_size *= 2;
-    stack = VyRealloc(stack, sizeof(VyObj) * stack_size);
+    stack = VyNoHeapRealloc(stack, sizeof(VyObj) * stack_size);
 }
 
 /* Add something to the top of the stack */

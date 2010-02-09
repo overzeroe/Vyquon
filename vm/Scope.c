@@ -19,7 +19,7 @@ Scope* current_scope = NULL;
 
 /* Initialize a scope from a parent (create hashes, whatever) */
 Scope* CreateScope(Scope* parent){
-    Scope* scope = VyMalloc(sizeof(Scope));
+    Scope* scope = VyNoHeapMalloc(sizeof(Scope));
     scope->parent = parent;
     scope->var_values = g_hash_table_new(g_str_hash, g_str_equal);
     scope->type_values = g_hash_table_new(g_str_hash, g_str_equal);
@@ -75,5 +75,5 @@ void DeleteScope(Scope* scope){
     g_hash_table_destroy(scope->var_values);
     g_hash_table_destroy(scope->type_values);
     g_hash_table_destroy(scope->size_values);
-    VyFree(scope);
+    VyNoHeapFree(scope);
 }
