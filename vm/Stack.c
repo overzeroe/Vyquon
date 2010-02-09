@@ -47,3 +47,10 @@ VyObj StackPop(){
 VyObj StackPeek(){
     return stack[stack_index - 1];
 }
+
+void MarkAllOnStack(){
+    int i = 0; 
+    for(i = 0; i < stack_index; i++){
+        GCMark(stack[i]);
+    }
+}

@@ -61,6 +61,9 @@ void StackPush(VyObj);
 VyObj StackPop();
 VyObj StackPeek();
 
+/* Call GCMark() on all the objects on the stack */
+void MarkAllOnStack();
+
 
 /* Instructions for the stack-based VM */
 #define INSTR_POP    10      /* Pop a value off the stack (associated data: none) */
