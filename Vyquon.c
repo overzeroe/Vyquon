@@ -7,9 +7,6 @@ extern void LoadCoreLibrary();
 void FinishRuntime();
 
 int main(){
-    /* GC required */
-    MARK_STACK_START();
-
     /* Load library */
     LoadCoreLibrary();
 
