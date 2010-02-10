@@ -11,28 +11,11 @@
  * thus allowing the user to bypass garbage collection if desired.
  */
 
-/* Allocate memory on the heap */
-void* VyMalloc(VyType);
+/* Allocate memory for the VM */
+void* VyMalloc(size_t size);
+void* VyRealloc(void*, size_t size);
 
-/* Allocate memory away from the heap  */
-void* VyNoHeapMalloc(size_t);
-void* VyNoHeapRealloc(void*, size_t);
-void  VyNoHeapFree(void* ptr);
-
-/* Allocate memory for bytecode */
-void* VyBytecodeInstrAlloc(size_t);
-void  VyBytecodeInstrFree(void*);
-
-/* GC Mark & Sweep */
-void ForceGC();
-void GCMark(VyObj);
-
-/* Store the system start and end of the stack */
-extern void* __stack_start;
-extern void* __stack_end;
-#define MARK_STACK_START() {char x = '\0'; __stack_start = &x;}
-#define MARK_STACK_END() {char x = '\0'; __stack_end = &x;}
-#define STACK_START() __stack_start
-#define STACK_END() __stack_end
+/* Free memory allocated */
+void VyFree(void* ptr);
 
 #endif /* MEM_H */

@@ -9,14 +9,14 @@ int stack_index = 0;
 
 /* Create the stack */
 void InitStack(){
-    stack = VyNoHeapMalloc(sizeof(VyObj) * stack_size);
+    stack = VyMalloc(sizeof(VyObj) * stack_size);
     stack_index = 0;
 }
 
 /* Expand the stack - multiply size by 2 */
 void ExpandStack(){
     stack_size *= 2;
-    stack = VyNoHeapRealloc(stack, sizeof(VyObj) * stack_size);
+    stack = VyRealloc(stack, sizeof(VyObj) * stack_size);
 }
 
 /* Add something to the top of the stack */
@@ -46,11 +46,4 @@ VyObj StackPop(){
 /* Return whatever is on top of the stack */
 VyObj StackPeek(){
     return stack[stack_index - 1];
-}
-
-void MarkAllOnStack(){
-    int i = 0; 
-    for(i = 0; i < stack_index; i++){
-        GCMark(stack[i]);
-    }
 }
