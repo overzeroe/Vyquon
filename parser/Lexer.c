@@ -13,7 +13,7 @@ inline bool IsNumeric(char c){
 /* Create and manage token lists */
 TokenList* CreateTokenList() {
     Token token = {type: TOKEN_NOTDEF, data: NULL};
-    TokenList* tok_list = VyNoHeapMalloc(sizeof(TokenList));
+    TokenList* tok_list = VyMalloc(sizeof(TokenList));
     tok_list->count = 0;
     tok_list->token = token;
     tok_list->next = NULL;
@@ -29,7 +29,7 @@ TokenList* AppendToken(TokenList* list, Token token){
     }
 
     /* Append a new token to the end of the list, return it */
-    TokenList* next = VyNoHeapMalloc(sizeof(TokenList));
+    TokenList* next = VyMalloc(sizeof(TokenList));
     next->count = list->count + 1;
     next->token = token;
     next->next = NULL;
@@ -82,10 +82,10 @@ void PrintTokens(FILE* out, TokenList* tokens){
 void FreeTokens(TokenList* tokens){
     while(tokens != NULL){
         char* data = tokens->token.data;
-        if(data) VyNoHeapFree(data);
+        if(data) VyFree(data);
 
         TokenList* next = tokens->next;
-        VyNoHeapFree(tokens);
+        VyFree(tokens);
         tokens = next;
     }
 }
@@ -176,7 +176,7 @@ TokenList* LexFile(FILE* file){
                 }
 
                 /* Allocate memory for string and read from file */
-                char* str_data = VyNoHeapMalloc(sizeof(char) * (char_count + 1));
+                char* str_data = VyMalloc(sizeof(char) * (char_count + 1));
                 fseek(file, -char_count - 1, SEEK_CUR);
                 fread(str_data, sizeof(char), char_count, file);
 
@@ -208,7 +208,7 @@ TokenList* LexFile(FILE* file){
                 }
 
                 /* Read the token from a file, but remember to allocate an extra byte for the null terminator */
-                str_data = VyNoHeapMalloc(sizeof(char) * (char_count + 1));
+                str_data = VyMalloc(sizeof(char) * (char_count + 1));
                 fseek(file, -char_count - 1, SEEK_CUR);
                 fread(str_data, sizeof(char), char_count - 0, file);
 
